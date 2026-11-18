@@ -1,0 +1,25 @@
+# Archivos de entorno y configuración local
+.env
+.env.local
+
+# Archivos del sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Carpetas de editores e IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos temporales y de depuración
+*.log
+*.tmp
+temp/
+scratch/
+test_*.php
+
+# Respaldos de base de datos temporales
+*.dump
+*.bak
