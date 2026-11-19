@@ -395,19 +395,29 @@ class UsuarioController
         }
 
         // Comprobar si tiene registros clínicos vinculados que impidan eliminación física por integridad médica
-        $stmtP = $this->db->prepare("SELECT COUNT(*) FROM pacientes WHERE creado_por_usuario_id = :id OR eliminado_por_usuario_id = :id");
-        $stmtP->execute([':id' => $id]);
+        $stmtP = $this->db->prepare("SELECT COUNT(*) FROM pacientes WHERE creado_por_usuario_id = :id_creador OR eliminado_por_usuario_id = :id_eliminador");
+        $stmtP->execute([
+            ':id_creador'    => $id,
+            ':id_eliminador' => $id
+        ]);
         $cantPacientes = (int) $stmtP->fetchColumn();
 
-        $stmtHC = $this->db->prepare("SELECT COUNT(*) FROM historias_clinicas WHERE especialista_id = :id OR creado_por_usuario_id = :id");
-        $stmtHC->execute([':id' => $id]);
+        $stmtHC = $this->db->prepare("SELECT COUNT(*) FROM historias_clinicas WHERE especialista_id = :id_esp OR creado_por_usuario_id = :id_creador");
+        $stmtHC->execute([
+            ':id_esp'     => $id,
+            ':id_creador' => $id
+        ]);
         $cantHistorias = (int) $stmtHC->fetchColumn();
 
         $stmtH = $this->db->prepare("SELECT COUNT(*) FROM historial_cambios_pacientes WHERE modificado_por_usuario_id = :id");
         $stmtH->execute([':id' => $id]);
         $cantAuditorias = (int) $stmtH->fetchColumn();
 
-        $totalVinculos = $cantPacientes + $cantHistorias + $cantAuditorias;
+        $stmtC = $this->db->prepare("SELECT COUNT(*) FROM citas WHERE especialista_id = :id");
+        $stmtC->execute([':id' => $id]);
+        $cantCitas = (int) $stmtC->fetchColumn();
+
+        $totalVinculos = $cantPacientes + $cantHistorias + $cantAuditorias + $cantCitas;
 
         if ($totalVinculos > 0) {
             // Por integridad médico-legal, no se destruye la autoría de historias clínicas. Se da de baja (inactivo)
