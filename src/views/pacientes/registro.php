@@ -58,7 +58,10 @@ require_once dirname(__DIR__) . '/layout/header.php';
             Registro inicial, antecedentes patológicos y valoración biomecánica.
         </p>
     </div>
-    <div class="flex items-center space-x-2">
+    <div class="flex flex-wrap items-center gap-2">
+        <a href="index.php?accion=ficha_blanco" target="_blank" class="touch-target inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-[#005B94] bg-white border border-[#005B94]/30 rounded-xl hover:bg-slate-50 shadow-sm transition">
+            <i class="fa-solid fa-file-lines mr-2 text-[#005B94]"></i> Ver Modelo en Blanco
+        </a>
         <a href="index.php?accion=listado" class="touch-target inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 shadow-sm transition">
             <i class="fa-solid fa-arrow-left mr-2 text-slate-500"></i> Ver Directorio
         </a>

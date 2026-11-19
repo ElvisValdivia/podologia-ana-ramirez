@@ -167,15 +167,47 @@ class PacienteController
         requerirAutenticacion();
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-        $paciente = $this->pacienteModel->obtenerPorId($id);
+        
+        if ($id <= 0) {
+            // Modelo de Ficha en Blanco oficial (sin rellenar) para vista previa o impresión física
+            $esFichaEnBlanco = true;
+            $paciente = [
+                'id'                      => 0,
+                'documento_identidad'     => '',
+                'tipo_documento'          => 'DNI',
+                'nombre'                  => '',
+                'apellido'                => '',
+                'fecha_nacimiento'        => '',
+                'genero'                  => '',
+                'telefono'                => '',
+                'email'                   => '',
+                'direccion'               => '',
+                'ocupacion'               => '',
+                'tipo_calzado_habitual'   => '',
+                'es_diabetico'            => 0,
+                'tipo_diabetes'           => '',
+                'tiene_hipertension'      => 0,
+                'problemas_circulatorios' => 0,
+                'usa_anticoagulantes'     => 0,
+                'tiene_marcapasos'        => 0,
+                'enfermedades_renales'    => 0,
+                'otras_patologias'        => '',
+                'alergias_medicamentos'   => '',
+                'alergias_contacto'       => '',
+            ];
+            $historiasClinicas = [];
+        } else {
+            $esFichaEnBlanco = false;
+            $paciente = $this->pacienteModel->obtenerPorId($id);
 
-        if (!$paciente) {
-            flash('error', 'Paciente no encontrado para impresión.');
-            header('Location: index.php?accion=listado');
-            exit;
+            if (!$paciente) {
+                flash('error', 'Paciente no encontrado para impresión.');
+                header('Location: index.php?accion=listado');
+                exit;
+            }
+
+            $historiasClinicas = $this->pacienteModel->obtenerHistoriasClinicas($id);
         }
-
-        $historiasClinicas = $this->pacienteModel->obtenerHistoriasClinicas($id);
 
         require_once dirname(__DIR__) . '/views/pacientes/imprimir_ficha.php';
     }

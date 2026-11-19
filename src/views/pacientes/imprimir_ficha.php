@@ -1,21 +1,23 @@
 <?php
 // Vista de Impresión Oficial y Ficha Clínica Digital (Eco-Friendly / Cero Papel)
 // Podología Ana Ramírez • Software desarrollado por KilaCode
+$esFichaEnBlanco = !empty($esFichaEnBlanco) || empty($paciente['id']);
+
 $telPaciente = preg_replace('/[^0-9]/', '', $paciente['telefono'] ?? '');
 if (strlen($telPaciente) === 9 && !str_starts_with($telPaciente, '51')) {
     $telPaciente = '51' . $telPaciente;
 }
-$expedienteCod = '#' . str_pad((string)$paciente['id'], 6, '0', STR_PAD_LEFT);
-$mensajeWa = urlencode("Estimado(a) " . $paciente['nombre'] . " " . $paciente['apellido'] . ", le saludamos cordialmente de Podología Ana Ramírez.\n\nLe compartimos su Ficha Clínica Oficial (" . $expedienteCod . "). Con nuestro compromiso ecológico 'Cero Papel', mantenemos su expediente disponible en formato digital para su consulta y cuidado podológico.\n\n¡Gracias por confiar en nosotros!");
-$emailAsunto = urlencode("Ficha Clínica Podológica " . $expedienteCod . " - " . $paciente['nombre'] . " " . $paciente['apellido']);
-$emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos la referencia de su expediente clínico en Podología Ana Ramírez (" . $expedienteCod . ").\n\nCuidamos su salud podológica con tecnología y compromiso ambiental.\n\nPodología Ana Ramírez • Software por KilaCode");
+$expedienteCod = $esFichaEnBlanco ? '#000000 (MODELO OFICIAL)' : ('#' . str_pad((string)$paciente['id'], 6, '0', STR_PAD_LEFT));
+$mensajeWa = urlencode("Estimado(a) " . ($paciente['nombre'] ?? '') . " " . ($paciente['apellido'] ?? '') . ", le saludamos cordialmente de Podología Ana Ramírez.\n\nLe compartimos su Ficha Clínica Oficial (" . $expedienteCod . "). Con nuestro compromiso ecológico 'Cero Papel', mantenemos su expediente disponible en formato digital para su consulta y cuidado podológico.\n\n¡Gracias por confiar en nosotros!");
+$emailAsunto = urlencode("Ficha Clínica Podológica " . $expedienteCod . " - " . ($paciente['nombre'] ?? '') . " " . ($paciente['apellido'] ?? ''));
+$emailCuerpo = urlencode("Estimado(a) " . ($paciente['nombre'] ?? '') . ",\n\nAdjuntamos la referencia de su expediente clínico en Podología Ana Ramírez (" . $expedienteCod . ").\n\nCuidamos su salud podológica con tecnología y compromiso ambiental.\n\nPodología Ana Ramírez • Software por KilaCode");
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha_Clinica_<?= e($paciente['documento_identidad']) ?>_<?= e($paciente['apellido']) ?></title>
+    <title><?= $esFichaEnBlanco ? 'Modelo_Ficha_Clinica_Oficial' : ('Ficha_Clinica_' . e($paciente['documento_identidad']) . '_' . e($paciente['apellido'])) ?></title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -62,30 +64,37 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
     <div class="no-print max-w-4xl mx-auto mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center space-x-3.5">
             <div class="w-11 h-11 rounded-2xl bg-[#005B94] text-white flex items-center justify-center text-xl shadow-md">
-                <i class="fa-solid fa-leaf text-[#2EC4B6]"></i>
+                <i class="fa-solid fa-file-invoice text-[#2EC4B6]"></i>
             </div>
             <div>
                 <div class="flex items-center space-x-2">
-                    <h3 class="text-sm font-black text-slate-900">Ficha Clínica Digital & Flujo Ecológico</h3>
-                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800">Cero Papel 🌱</span>
+                    <h3 class="text-sm font-black text-slate-900">
+                        <?= $esFichaEnBlanco ? 'Modelo de Ficha Clínica en Blanco (Formato Oficial)' : 'Ficha Clínica Digital & Flujo Ecológico' ?>
+                    </h3>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full <?= $esFichaEnBlanco ? 'bg-blue-100 text-[#005B94]' : 'bg-emerald-100 text-emerald-800' ?>">
+                        <?= $esFichaEnBlanco ? 'Plantilla Oficial' : 'Cero Papel 🌱' ?>
+                    </span>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">Envíe la ficha directamente por WhatsApp o Correo para cuidar el medio ambiente, o guárdela en PDF.</p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                    <?= $esFichaEnBlanco ? 'Visualice el formato original sin rellenar o imprima hojas físicas de exploración podológica.' : 'Envíe la ficha directamente por WhatsApp o Correo para cuidar el medio ambiente, o guárdela en PDF.' ?>
+                </p>
             </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-            <a href="index.php?accion=detalle&id=<?= $paciente['id'] ?>" class="px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shadow-sm">
+            <a href="<?= $esFichaEnBlanco ? 'index.php?accion=listado' : ('index.php?accion=detalle&id=' . $paciente['id']) ?>" 
+               class="px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shadow-sm">
                 <i class="fa-solid fa-arrow-left mr-1.5"></i> Volver
             </a>
 
-            <?php if (!empty($telPaciente)): ?>
+            <?php if (!$esFichaEnBlanco && !empty($telPaciente)): ?>
                 <a href="https://wa.me/<?= $telPaciente ?>?text=<?= $mensajeWa ?>" target="_blank" 
                    class="px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center">
                     <i class="fa-brands fa-whatsapp mr-1.5 text-sm"></i> WhatsApp
                 </a>
             <?php endif; ?>
 
-            <?php if (!empty($paciente['email'])): ?>
+            <?php if (!$esFichaEnBlanco && !empty($paciente['email'])): ?>
                 <a href="mailto:<?= e($paciente['email']) ?>?subject=<?= $emailAsunto ?>&body=<?= $emailCuerpo ?>" 
                    class="px-3.5 py-2 text-xs font-bold rounded-xl bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition flex items-center">
                     <i class="fa-regular fa-envelope mr-1.5 text-sm"></i> Correo
@@ -93,7 +102,7 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
             <?php endif; ?>
 
             <button onclick="window.print()" class="px-4 py-2 text-xs font-bold rounded-xl bg-[#005B94] hover:bg-[#0A2540] text-white shadow-md transition flex items-center">
-                <i class="fa-solid fa-print mr-1.5 text-[#2EC4B6]"></i> Imprimir / PDF
+                <i class="fa-solid fa-print mr-1.5 text-[#2EC4B6]"></i> <?= $esFichaEnBlanco ? 'Imprimir Ficha en Blanco' : 'Imprimir / PDF' ?>
             </button>
         </div>
     </div>
@@ -155,38 +164,38 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div class="sm:col-span-2">
                         <span class="font-bold text-slate-600">Nombre y Apellido:</span>
-                        <span class="font-bold text-slate-900 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-140px)]"><?= e($paciente['apellido']) ?>, <?= e($paciente['nombre']) ?></span>
+                        <span class="font-bold text-slate-900 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-140px)]"><?= $esFichaEnBlanco ? '&nbsp;' : (e($paciente['apellido']) . ', ' . e($paciente['nombre'])) ?></span>
                     </div>
                     <div>
                         <span class="font-bold text-slate-600">Tel / Celular:</span>
-                        <span class="font-mono font-bold text-slate-900 ml-1"><?= e($paciente['telefono']) ?></span>
+                        <span class="font-mono font-bold text-slate-900 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-90px)]"><?= $esFichaEnBlanco ? '&nbsp;' : e($paciente['telefono']) ?></span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div class="sm:col-span-2">
                         <span class="font-bold text-slate-600">Domicilio:</span>
-                        <span class="text-slate-800 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-80px)]"><?= e($paciente['direccion'] ?: 'No registrado') ?></span>
+                        <span class="text-slate-800 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-80px)]"><?= $esFichaEnBlanco ? '&nbsp;' : (e($paciente['direccion'] ?: 'No registrado')) ?></span>
                     </div>
                     <div>
                         <span class="font-bold text-slate-600">Doc. Identidad:</span>
-                        <span class="font-mono font-bold text-slate-900 ml-1"><?= e($paciente['tipo_documento']) ?> <?= e($paciente['documento_identidad']) ?></span>
+                        <span class="font-mono font-bold text-slate-900 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-100px)]"><?= $esFichaEnBlanco ? '&nbsp;' : (e($paciente['tipo_documento']) . ' ' . e($paciente['documento_identidad'])) ?></span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div>
                         <span class="font-bold text-slate-600">Fecha de nacimiento:</span>
-                        <span class="text-slate-800 font-mono ml-1"><?= e($paciente['fecha_nacimiento']) ?></span>
+                        <span class="text-slate-800 font-mono ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-130px)]"><?= $esFichaEnBlanco ? '&nbsp;' : e($paciente['fecha_nacimiento']) ?></span>
                     </div>
                     <div>
                         <span class="font-bold text-slate-600">Ocupación habitual:</span>
-                        <span class="text-slate-800 ml-1"><?= e($paciente['ocupacion'] ?: 'No especificada') ?></span>
+                        <span class="text-slate-800 ml-1 border-b border-slate-300 pb-0.5 inline-block w-[calc(100%-120px)]"><?= $esFichaEnBlanco ? '&nbsp;' : (e($paciente['ocupacion'] ?: 'No especificada')) ?></span>
                     </div>
                     <div>
                         <span class="font-bold text-slate-600">Usa calzado de seguridad:</span>
-                        <span class="font-bold ml-1 <?= stripos($paciente['tipo_calzado_habitual'] ?? '', 'seguridad') !== false || stripos($paciente['tipo_calzado_habitual'] ?? '', 'trabajo') !== false ? 'text-amber-700' : 'text-slate-700' ?>">
-                            <?= (stripos($paciente['tipo_calzado_habitual'] ?? '', 'seguridad') !== false || stripos($paciente['tipo_calzado_habitual'] ?? '', 'trabajo') !== false) ? 'SÍ' : 'NO' ?>
+                        <span class="font-bold ml-1 text-slate-700">
+                            <?= $esFichaEnBlanco ? '<span class="text-slate-500 font-bold">SI  /  NO</span>' : ((stripos($paciente['tipo_calzado_habitual'] ?? '', 'seguridad') !== false || stripos($paciente['tipo_calzado_habitual'] ?? '', 'trabajo') !== false) ? 'SÍ' : 'NO') ?>
                         </span>
                     </div>
                 </div>
@@ -197,66 +206,114 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     
                     <!-- Diabetes -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= !empty($paciente['es_diabetico']) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">Diabetes:</span>
-                        <span class="font-bold <?= !empty($paciente['es_diabetico']) ? 'text-rose-700' : 'text-slate-400' ?>">
-                            <?= !empty($paciente['es_diabetico']) ? 'SI ('.e($paciente['tipo_diabetes'] ?: 'DM').')' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && !empty($paciente['es_diabetico'])) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">Diabetes:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= !empty($paciente['es_diabetico']) ? 'text-rose-700' : 'text-slate-400' ?>">
+                                    <?= !empty($paciente['es_diabetico']) ? 'SI ('.e($paciente['tipo_diabetes'] ?: 'DM').')' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Alergias -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= !empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto']) ? 'bg-amber-50 border-amber-300 font-bold text-amber-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">Alergias:</span>
-                        <span class="font-bold <?= (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto'])) ? 'text-amber-700' : 'text-slate-400' ?>">
-                            <?= (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto'])) ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto']))) ? 'bg-amber-50 border-amber-300 font-bold text-amber-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">Alergias:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto'])) ? 'text-amber-700' : 'text-slate-400' ?>">
+                                    <?= (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto'])) ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Artritis -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false ? 'bg-blue-50 border-blue-300 font-bold text-blue-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">Artritis:</span>
-                        <span class="font-bold <?= stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false ? 'text-blue-700' : 'text-slate-400' ?>">
-                            <?= stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false) ? 'bg-blue-50 border-blue-300 font-bold text-blue-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">Artritis:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false ? 'text-blue-700' : 'text-slate-400' ?>">
+                                    <?= stripos($paciente['otras_patologias'] ?? '', 'artritis') !== false ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- H.I.V -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false ? 'bg-purple-50 border-purple-300 font-bold text-purple-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">H.I.V:</span>
-                        <span class="font-bold <?= stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false ? 'text-purple-700' : 'text-slate-400' ?>">
-                            <?= stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && (stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false)) ? 'bg-purple-50 border-purple-300 font-bold text-purple-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">H.I.V:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= (stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false) ? 'text-purple-700' : 'text-slate-400' ?>">
+                                    <?= (stripos($paciente['otras_patologias'] ?? '', 'hiv') !== false || stripos($paciente['otras_patologias'] ?? '', 'vih') !== false) ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Hipertenso -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= !empty($paciente['tiene_hipertension']) ? 'bg-cyan-50 border-cyan-300 font-bold text-cyan-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">Hipertenso:</span>
-                        <span class="font-bold <?= !empty($paciente['tiene_hipertension']) ? 'text-cyan-700' : 'text-slate-400' ?>">
-                            <?= !empty($paciente['tiene_hipertension']) ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && !empty($paciente['tiene_hipertension'])) ? 'bg-cyan-50 border-cyan-300 font-bold text-cyan-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">Hipertenso:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= !empty($paciente['tiene_hipertension']) ? 'text-cyan-700' : 'text-slate-400' ?>">
+                                    <?= !empty($paciente['tiene_hipertension']) ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Epilepsia -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false ? 'bg-indigo-50 border-indigo-300 font-bold text-indigo-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">Epilepsia:</span>
-                        <span class="font-bold <?= stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false ? 'text-indigo-700' : 'text-slate-400' ?>">
-                            <?= stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false) ? 'bg-indigo-50 border-indigo-300 font-bold text-indigo-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">Epilepsia:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false ? 'text-indigo-700' : 'text-slate-400' ?>">
+                                    <?= stripos($paciente['otras_patologias'] ?? '', 'epilepsia') !== false ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Aspirinas -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes'])) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">¿Aspirinas?:</span>
-                        <span class="font-bold <?= (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes'])) ? 'text-rose-700' : 'text-slate-400' ?>">
-                            <?= (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes'])) ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes']))) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">¿Aspirinas?:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes'])) ? 'text-rose-700' : 'text-slate-400' ?>">
+                                    <?= (stripos($paciente['otras_patologias'] ?? '', 'aspirina') !== false || !empty($paciente['usa_anticoagulantes'])) ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
                     <!-- Anticoagulantes -->
-                    <div class="p-2 rounded-lg border flex items-center justify-between <?= !empty($paciente['usa_anticoagulantes']) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
-                        <span class="text-slate-700">¿Anticoagulantes?:</span>
-                        <span class="font-bold <?= !empty($paciente['usa_anticoagulantes']) ? 'text-rose-700' : 'text-slate-400' ?>">
-                            <?= !empty($paciente['usa_anticoagulantes']) ? 'SI' : 'NO' ?>
+                    <div class="p-2 rounded-lg border flex items-center justify-between <?= (!$esFichaEnBlanco && !empty($paciente['usa_anticoagulantes'])) ? 'bg-rose-50 border-rose-300 font-bold text-rose-900' : 'bg-slate-50 border-slate-200' ?>">
+                        <span class="text-slate-700 font-bold">¿Anticoagulantes?:</span>
+                        <span>
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span>
+                            <?php else: ?>
+                                <span class="font-bold <?= !empty($paciente['usa_anticoagulantes']) ? 'text-rose-700' : 'text-slate-400' ?>">
+                                    <?= !empty($paciente['usa_anticoagulantes']) ? 'SI' : 'NO' ?>
+                                </span>
+                            <?php endif; ?>
                         </span>
                     </div>
 
@@ -266,15 +323,21 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
                 <div class="mt-2.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                     <div>
                         <span class="font-bold text-slate-700">¿Está bajo atención médica?:</span>
-                        <span class="font-bold text-slate-900 ml-1"><?= (!empty($paciente['es_diabetico']) || !empty($paciente['tiene_hipertension']) || !empty($paciente['enfermedades_renales'])) ? 'SÍ' : 'NO REFERIDO' ?></span>
-                    </div>
-                    <div>
-                        <span class="font-bold text-slate-700">¿Toma medicamentos habitualmente?:</span>
-                        <span class="text-slate-900 ml-1">
-                            <?= !empty($paciente['otras_patologias']) ? 'SÍ (' . e($paciente['otras_patologias']) . ')' : 'No manifiesta' ?>
+                        <span class="ml-1">
+                            <?= $esFichaEnBlanco ? '<span class="text-slate-500 font-bold">SI  /  NO</span>' : '<span class="font-bold text-slate-900">' . ((!empty($paciente['es_diabetico']) || !empty($paciente['tiene_hipertension']) || !empty($paciente['enfermedades_renales'])) ? 'SÍ' : 'NO REFERIDO') . '</span>' ?>
                         </span>
                     </div>
-                    <?php if (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto'])): ?>
+                    <div>
+                        <span class="font-bold text-slate-700">¿Toma medicamentos?:</span>
+                        <span class="ml-1">
+                            <?php if ($esFichaEnBlanco): ?>
+                                <span class="text-slate-500 font-bold">SI  /  NO</span> &nbsp;&nbsp; <span class="text-slate-600 font-bold">¿Cuáles?:</span> <span class="border-b border-slate-300 inline-block w-36">&nbsp;</span>
+                            <?php else: ?>
+                                <span class="text-slate-900"><?= !empty($paciente['otras_patologias']) ? ('SÍ (' . e($paciente['otras_patologias']) . ')') : 'No manifiesta' ?></span>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                    <?php if (!$esFichaEnBlanco && (!empty($paciente['alergias_medicamentos']) || !empty($paciente['alergias_contacto']))): ?>
                         <div class="sm:col-span-2 text-rose-800 font-semibold">
                             <i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i>
                             Alergias específicas: <?= e(trim($paciente['alergias_medicamentos'] . ' ' . $paciente['alergias_contacto'])) ?>
@@ -287,7 +350,7 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
             <div class="text-xs space-y-1">
                 <span class="font-bold text-slate-700 block">Observaciones Clínicas / Diagnóstico:</span>
                 
-                <?php if (!empty($historiasClinicas)): ?>
+                <?php if (!$esFichaEnBlanco && !empty($historiasClinicas)): ?>
                     <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
                         <?php foreach (array_slice($historiasClinicas, 0, 2) as $hc): ?>
                             <div class="text-[11px]">
@@ -300,6 +363,9 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
                     <div class="space-y-2 pt-1">
                         <div class="dotted-line"></div>
                         <div class="dotted-line"></div>
+                        <?php if ($esFichaEnBlanco): ?>
+                            <div class="dotted-line"></div>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -486,9 +552,9 @@ $emailCuerpo = urlencode("Estimado(a) " . $paciente['nombre'] . ",\n\nAdjuntamos
 
                     <div>
                         <div class="border-b border-slate-400 h-12 mb-1.5"></div>
-                        <span class="font-bold text-slate-900 block text-[11px]"><?= e($paciente['nombre']) ?> <?= e($paciente['apellido']) ?></span>
-                        <span class="text-[9px] text-slate-500 block">DNI / Doc: <?= e($paciente['documento_identidad']) ?></span>
-                        <span class="text-[8px] text-slate-400">Firma del Paciente / Consentimiento Informado</span>
+                        <span class="font-bold text-slate-900 block text-[11px]"><?= $esFichaEnBlanco ? 'Firma del Paciente / Tutor' : (e($paciente['nombre']) . ' ' . e($paciente['apellido'])) ?></span>
+                        <span class="text-[9px] text-slate-500 block">DNI / Doc: <?= $esFichaEnBlanco ? '....................................' : e($paciente['documento_identidad']) ?></span>
+                        <span class="text-[8px] text-slate-400">Consentimiento Informado</span>
                     </div>
                 </div>
 

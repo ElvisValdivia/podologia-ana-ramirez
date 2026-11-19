@@ -90,6 +90,7 @@ switch ($accion) {
         break;
 
     case 'imprimir_ficha':
+    case 'ficha_blanco':
         $pacienteControlador->imprimirFicha();
         break;
 

@@ -29,7 +29,11 @@ $filtroActual = $filtro ?? 'activo';
             Expedientes clínicos, trazabilidad, alertas podológicas y gestión de registros.
         </p>
     </div>
-    <div class="flex items-center space-x-2">
+    <div class="flex flex-wrap items-center gap-2">
+        <a href="index.php?accion=ficha_blanco" target="_blank" class="touch-target inline-flex items-center justify-center px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs hover:bg-slate-50 active:scale-95 transition shadow-sm">
+            <i class="fa-solid fa-file-lines mr-2 text-[#005B94]"></i> Ver Ficha en Blanco
+        </a>
+
         <a href="index.php?accion=registro" class="touch-target inline-flex items-center justify-center px-5 py-3 rounded-xl bg-[#005B94] text-white font-bold text-xs hover:bg-[#0A2540] active:scale-95 transition shadow-sm">
             <i class="fa-solid fa-user-plus mr-2 text-[#2EC4B6]"></i> Registrar Nuevo Paciente
         </a>
