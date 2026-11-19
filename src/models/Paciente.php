@@ -184,8 +184,9 @@ class Paciente
     }
 
     /**
-     * Actualiza datos secundarios del paciente y REGISTRA EL HISTORIAL INMUTABLE DE CAMBIOS.
-     * RESTRICCIÓN DE INTEGRIDAD: No permite modificar documento_identidad, nombre ni apellido.
+     * Actualiza datos del paciente y REGISTRA EL HISTORIAL INMUTABLE DE CAMBIOS.
+     * En modo manual (sin API de RENIEC), permite rectificar datos filiatorios (DNI, Nombres, Nacimiento)
+     * registrando toda alteración en la auditoría inmutable para trazabilidad legal.
      *
      * @param int $id ID del paciente
      * @param array<string, mixed> $nuevosDatos Nuevos valores
@@ -200,8 +201,11 @@ class Paciente
             return false;
         }
 
-        // Lista de campos secundarios editables por Admin
+        // Lista completa de campos auditables editables por Administración
+        // Permite rectificación de filiación (DNI, nombres, apellidos, nacimiento, género)
+        // mientras el centro opera sin conexión a la API oficial de RENIEC.
         $camposAuditables = [
+            'documento_identidad', 'tipo_documento', 'nombre', 'apellido', 'fecha_nacimiento', 'genero',
             'telefono', 'telefono_emergencia', 'contacto_emergencia', 'email', 'direccion', 'ocupacion',
             'es_diabetico', 'tipo_diabetes', 'tiene_hipertension', 'problemas_circulatorios',
             'usa_anticoagulantes', 'tiene_marcapasos', 'enfermedades_renales', 'otras_patologias',
@@ -256,8 +260,14 @@ class Paciente
                 ]);
             }
 
-            // 2. Actualizar el registro en la tabla pacientes (Protegiendo DNI, Nombre y Apellido)
+            // 2. Actualizar el registro en la tabla pacientes con soporte de datos filiatorios
             $sqlUp = "UPDATE pacientes SET
+                documento_identidad = :documento_identidad,
+                tipo_documento = :tipo_documento,
+                nombre = :nombre,
+                apellido = :apellido,
+                fecha_nacimiento = :fecha_nacimiento,
+                genero = :genero,
                 telefono = :telefono,
                 telefono_emergencia = :telefono_emergencia,
                 contacto_emergencia = :contacto_emergencia,
@@ -283,6 +293,12 @@ class Paciente
             $stmtUp = $this->db->prepare($sqlUp);
             $stmtUp->execute([
                 ':id'                      => $id,
+                ':documento_identidad'     => trim($nuevosDatos['documento_identidad'] ?? $actual['documento_identidad']),
+                ':tipo_documento'          => trim($nuevosDatos['tipo_documento'] ?? $actual['tipo_documento']),
+                ':nombre'                  => trim($nuevosDatos['nombre'] ?? $actual['nombre']),
+                ':apellido'                => trim($nuevosDatos['apellido'] ?? $actual['apellido']),
+                ':fecha_nacimiento'        => !empty($nuevosDatos['fecha_nacimiento']) ? trim($nuevosDatos['fecha_nacimiento']) : $actual['fecha_nacimiento'],
+                ':genero'                  => trim($nuevosDatos['genero'] ?? $actual['genero']),
                 ':telefono'                => trim($nuevosDatos['telefono'] ?? $actual['telefono']),
                 ':telefono_emergencia'     => !empty($nuevosDatos['telefono_emergencia']) ? trim($nuevosDatos['telefono_emergencia']) : null,
                 ':contacto_emergencia'     => !empty($nuevosDatos['contacto_emergencia']) ? trim($nuevosDatos['contacto_emergencia']) : null,

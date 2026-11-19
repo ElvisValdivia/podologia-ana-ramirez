@@ -277,6 +277,30 @@ class PacienteController
             exit;
         }
 
+        $documento = trim($_POST['documento_identidad'] ?? '');
+        $nombre = trim($_POST['nombre'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $fechaNacimiento = trim($_POST['fecha_nacimiento'] ?? '');
+
+        // Validación de campos filiatorios esenciales
+        if (empty($documento) || empty($nombre) || empty($apellido) || empty($telefono) || empty($fechaNacimiento)) {
+            flash('error', 'Por favor complete los campos obligatorios (Documento, Nombres, Apellidos, Fecha de Nacimiento y Teléfono).');
+            header("Location: index.php?accion=editar&id={$id}");
+            exit;
+        }
+
+        // Comprobación de unicidad de documento de identidad (excluyendo el registro actual)
+        if ($this->pacienteModel->existeDocumento($documento, $id)) {
+            flash('error', "El documento de identidad '{$documento}' ya se encuentra registrado en otro paciente.");
+            header("Location: index.php?accion=editar&id={$id}");
+            exit;
+        }
+
+        if (empty($motivo)) {
+            $motivo = 'Actualización autorizada de ficha clínica';
+        }
+
         $usuario = usuarioActual();
 
         $resultado = $this->pacienteModel->actualizarSeguroConAuditoria($id, $_POST, (int)$usuario['id'], $motivo);
