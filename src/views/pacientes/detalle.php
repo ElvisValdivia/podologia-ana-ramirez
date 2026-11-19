@@ -62,17 +62,31 @@ require_once dirname(__DIR__) . '/layout/header.php';
             <i class="fa-solid fa-arrow-left mr-2"></i> Directorio
         </a>
 
-        <?php if (puedeEditarPaciente()): ?>
-            <!-- Botón de Impresión / Guardado PDF para Dueños y Administradores -->
-            <a href="index.php?accion=imprimir_ficha&id=<?= $paciente['id'] ?>" target="_blank"
-               class="touch-target inline-flex items-center px-4 py-2 text-xs font-bold rounded-xl border border-[#005B94] bg-white text-[#005B94] hover:bg-[#005B94] hover:text-white transition shadow-sm">
-                <i class="fa-solid fa-file-pdf mr-2 text-rose-600"></i> Imprimir Ficha / PDF
-            </a>
+        <!-- Botón de Ficha Digital / PDF (Accesible para todo el personal) -->
+        <a href="index.php?accion=imprimir_ficha&id=<?= $paciente['id'] ?>" target="_blank"
+           class="touch-target inline-flex items-center px-4 py-2 text-xs font-bold rounded-xl border border-[#005B94] bg-white text-[#005B94] hover:bg-[#005B94] hover:text-white transition shadow-sm">
+            <i class="fa-solid fa-file-pdf mr-2 text-rose-600"></i> Ficha Digital / PDF
+        </a>
 
-            <!-- Botón exclusivo para Admin / SuperAdmin -->
+        <?php 
+            $telLimpio = preg_replace('/[^0-9]/', '', $paciente['telefono'] ?? '');
+            if (strlen($telLimpio) === 9 && !str_starts_with($telLimpio, '51')) {
+                $telLimpio = '51' . $telLimpio;
+            }
+            $textoWa = urlencode("Hola " . ($paciente['nombre'] ?? '') . ", le saludamos de Podología Ana Ramírez. Le confirmamos la apertura de su Ficha Clínica (#" . str_pad((string)$paciente['id'], 6, '0', STR_PAD_LEFT) . "). Cuidamos de sus pies y del medio ambiente con historia digital.");
+        ?>
+        <?php if (!empty($telLimpio)): ?>
+            <a href="https://wa.me/<?= $telLimpio ?>?text=<?= $textoWa ?>" target="_blank"
+               class="touch-target inline-flex items-center px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm">
+                <i class="fa-brands fa-whatsapp mr-1.5 text-sm"></i> WhatsApp
+            </a>
+        <?php endif; ?>
+
+        <?php if (puedeEditarPaciente()): ?>
+            <!-- Botones exclusivos para Admin / SuperAdmin -->
             <a href="index.php?accion=editar&id=<?= $paciente['id'] ?>" 
                class="touch-target inline-flex items-center px-4 py-2 text-xs font-bold rounded-xl bg-[#005B94] text-white hover:bg-[#0A2540] transition shadow-sm">
-                <i class="fa-solid fa-pen-to-square mr-2 text-[#2EC4B6]"></i> Editar Datos Secundarios
+                <i class="fa-solid fa-pen-to-square mr-2 text-[#2EC4B6]"></i> Editar Datos
             </a>
 
             <a href="index.php?accion=eliminar&id=<?= $paciente['id'] ?>" 
@@ -84,7 +98,7 @@ require_once dirname(__DIR__) . '/layout/header.php';
             <!-- AVISO DE RESTRICCIÓN PARA TRABAJADORES -->
             <div class="inline-flex items-center px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs">
                 <i class="fa-solid fa-shield-halved text-amber-600 mr-2"></i>
-                <span>Modificación bloqueada (Solicitar corrección a la Administración)</span>
+                <span>Edición protegida</span>
             </div>
         <?php endif; ?>
     </div>

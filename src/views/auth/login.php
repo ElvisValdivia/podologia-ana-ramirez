@@ -109,7 +109,7 @@
 
         <!-- PIE DE PÁGINA -->
         <div class="text-center text-xs text-slate-400">
-            © <?= date('Y') ?> <strong>Podología Ana Ramírez</strong> • Todos los derechos reservados
+            © <?= date('Y') ?> <strong>Podología Ana Ramírez</strong> • Software desarrollado por <strong class="text-slate-500">KilaCode</strong>. Todos los derechos reservados
         </div>
 
     </div>

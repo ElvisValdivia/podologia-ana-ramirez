@@ -114,7 +114,13 @@ class PacienteController
         if ($nuevoId) {
             registrarLog('INFO', 'PACIENTES', 'CREAR_PACIENTE', "Paciente #{$nuevoId} ({$datos['nombre']} {$datos['apellido']}) registrado por {$usuario['email']}");
             flash('exito', "¡Ficha clínica del paciente <strong>{$datos['nombre']} {$datos['apellido']}</strong> registrada con éxito (Expediente #{$nuevoId})!");
-            header("Location: index.php?accion=detalle&id={$nuevoId}");
+            
+            $accionGuardar = $_POST['accion_guardar'] ?? 'guardar';
+            if ($accionGuardar === 'imprimir') {
+                header("Location: index.php?accion=imprimir_ficha&id={$nuevoId}");
+            } else {
+                header("Location: index.php?accion=detalle&id={$nuevoId}");
+            }
             exit;
         } else {
             flash('error', 'Error al guardar la ficha en la base de datos.');

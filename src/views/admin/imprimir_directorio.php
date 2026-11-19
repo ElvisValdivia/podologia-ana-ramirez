@@ -172,7 +172,7 @@ $totalCirculatorios = count(array_filter($pacientes, fn($p) => !empty($p['proble
         <!-- PIE TÉCNICO -->
         <div class="pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400">
             <div>
-                Documento de auditoría técnica general generado desde el sistema centralizado de Podología Ana Ramírez.
+                Documento de auditoría clínica oficial • Sistema desarrollado por <strong>KilaCode</strong>. Todos los derechos reservados.
             </div>
             <div class="font-mono">
                 Página 1 de 1 • Fin de Registro

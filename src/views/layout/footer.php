@@ -9,7 +9,7 @@
                 <span>• Acceso Local / Nube Sincronizada</span>
             </div>
             <div>
-                © <?= date('Y') ?> <strong>Podología Ana Ramírez</strong> - Todos los derechos reservados.
+                © <?= date('Y') ?> <strong>Podología Ana Ramírez</strong> • Software desarrollado por <strong class="text-slate-700 hover:text-[#005B94] transition">KilaCode</strong>. Todos los derechos reservados.
             </div>
         </div>
     </footer>

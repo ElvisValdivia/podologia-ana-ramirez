@@ -410,13 +410,17 @@ require_once dirname(__DIR__) . '/layout/header.php';
     </div>
 
     <!-- BOTONES DE ACCIÓN PRINCIPALES (ERGO-TÁCTIL PARA TABLETS) -->
-    <div class="pt-4 pb-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-4">
-        <button type="reset" class="touch-target w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold text-base hover:bg-slate-50 transition shadow-sm">
+    <div class="pt-4 pb-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 sm:gap-4">
+        <button type="reset" class="touch-target w-full sm:w-auto px-5 py-3.5 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold text-sm hover:bg-slate-50 transition shadow-sm">
             <i class="fa-solid fa-eraser mr-2 text-slate-400"></i> Limpiar Campos
         </button>
 
-        <button type="submit" id="btnGuardar" class="touch-target w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#005B94] text-white font-bold text-base hover:bg-[#0A2540] active:scale-[0.98] transition shadow-md hover:shadow-lg flex items-center justify-center">
-            <i class="fa-solid fa-floppy-disk mr-2.5 text-lg text-[#2EC4B6]"></i> Guardar Ficha Clínica
+        <button type="submit" name="accion_guardar" value="guardar" id="btnGuardar" class="touch-target w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#005B94] bg-white text-[#005B94] hover:bg-slate-50 active:scale-[0.98] font-bold text-sm transition shadow-sm flex items-center justify-center">
+            <i class="fa-solid fa-floppy-disk mr-2 text-base text-[#005B94]"></i> Guardar Ficha
+        </button>
+
+        <button type="submit" name="accion_guardar" value="imprimir" id="btnGuardarImprimir" class="touch-target w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#005B94] to-[#0A2540] text-white font-bold text-sm hover:brightness-110 active:scale-[0.98] transition shadow-md hover:shadow-lg flex items-center justify-center">
+            <i class="fa-solid fa-file-pdf mr-2 text-base text-[#2EC4B6]"></i> Guardar y Ver Ficha Digital / PDF
         </button>
     </div>
 
