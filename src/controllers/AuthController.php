@@ -41,11 +41,11 @@ class AuthController
             exit;
         }
 
-        $dni      = trim($_POST['dni'] ?? '');
+        $dni      = trim($_POST['usuario'] ?? $_POST['dni'] ?? '');
         $password = (string) ($_POST['password'] ?? '');
 
         if (empty($dni) || empty($password)) {
-            flash('error', 'Por favor ingrese su número de DNI / Cédula y su contraseña.');
+            flash('error', 'Por favor ingrese su usuario y contraseña.');
             header('Location: index.php?accion=login');
             exit;
         }
@@ -55,12 +55,12 @@ class AuthController
 
             // Si es su primer ingreso con DNI como contraseña, exigir el cambio de inmediato
             if (!empty($usuario['debe_cambiar_password'])) {
-                flash('exito', "Bienvenido(a), <strong>{$usuario['nombre_completo']}</strong>. Por seguridad de la clínica, debe actualizar su contraseña inicial (su DNI).");
+                flash('exito', "Bienvenido(a), <strong>{$usuario['nombre_completo']}</strong>. Por seguridad de la clínica, debe actualizar su contraseña inicial.");
                 header('Location: index.php?accion=cambiar_password');
                 exit;
             }
 
-            flash('exito', "Bienvenido(a) de nuevo, <strong>{$usuario['nombre_completo']}</strong> ({$usuario['rol_nombre']}).");
+            flash('exito', "Bienvenido(a) de nuevo, <strong>{$usuario['nombre_completo']}</strong>.");
 
             if (esSuperAdmin()) {
                 header('Location: index.php?accion=sistema');
@@ -69,7 +69,7 @@ class AuthController
             }
             exit;
         } else {
-            flash('error', 'DNI o contraseña incorrectos. Recuerde que su contraseña inicial es su mismo número de DNI.');
+            flash('error', 'Usuario o contraseña incorrectos.');
             header('Location: index.php?accion=login');
             exit;
         }
