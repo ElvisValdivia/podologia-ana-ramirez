@@ -389,136 +389,34 @@ $emailCuerpo = urlencode("Estimado(a) " . ($paciente['nombre'] ?? '') . ",\n\nAd
                         <!-- PAR 1: VISTA DORSAL (EMPEINE Y UÑAS) -->
                         <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50 text-center">
                             <div class="text-[11px] font-black uppercase text-[#005B94] tracking-wide mb-1">
-                                VISTA DORSAL (Empeine y Láminas Ungueales)
+                                VISTA DORSAL (Empeine y Uñas)
                             </div>
-                            <p class="text-[9px] text-slate-500 mb-2">Para evaluar onicocriptosis, onicomicosis, distrofias y afecciones de dedos.</p>
+                            <p class="text-[9px] text-slate-500 mb-2">Para registrar onicocriptosis (uñeros), micosis y afecciones ungueales.</p>
 
-                            <!-- SVG DORSAL: Pie Derecho y Pie Izquierdo -->
-                            <div class="flex items-center justify-center space-x-6 py-1">
-                                
-                                <!-- Pie Derecho Dorsal -->
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-24 h-40" viewBox="0 0 100 160" fill="none" stroke="#334155" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <!-- Silueta Pie Derecho Dorsal -->
-                                        <path d="M 50 155 C 38 155 32 145 30 130 C 28 115 25 95 24 75 C 23 55 24 40 28 32 C 30 28 36 28 38 34 C 40 25 46 25 48 33 C 50 25 56 25 58 35 C 60 28 66 28 68 38 C 70 30 80 30 82 45 C 84 65 82 85 80 110 C 78 135 72 155 50 155 Z" fill="#ffffff" />
-                                        
-                                        <!-- Dedos y Uñas Pie Derecho -->
-                                        <!-- Dedo 1 (Hallux / Pulgar en borde interno derecho) -->
-                                        <path d="M 68 38 Q 75 35 82 45" />
-                                        <rect x="71" y="38" width="9" height="7" rx="2" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 2 -->
-                                        <path d="M 58 35 Q 63 32 68 38" />
-                                        <rect x="60" y="31" width="7" height="6" rx="1.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 3 -->
-                                        <path d="M 48 33 Q 53 30 58 35" />
-                                        <rect x="50" y="28" width="6" height="5.5" rx="1.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 4 -->
-                                        <path d="M 38 34 Q 43 31 48 33" />
-                                        <rect x="40" y="29" width="5.5" height="5" rx="1" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 5 (Meñique en borde externo izquierdo) -->
-                                        <path d="M 28 32 Q 33 30 38 34" />
-                                        <rect x="29" y="33" width="5" height="4.5" rx="1" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-
-                                        <!-- Líneas anatómicas del empeine -->
-                                        <path d="M 40 75 Q 52 80 65 75" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
-                                        <path d="M 42 105 Q 52 110 63 105" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
-                                    </svg>
-                                    <span class="text-[10px] font-bold text-slate-700 mt-1">Derecho</span>
+                            <!-- Imagen Oficial Dorsal Subida por la Clínica -->
+                            <div class="flex flex-col items-center justify-center py-1">
+                                <img src="assets/img/podograma-dorsal-clean.png" alt="Vista Dorsal Podología" class="h-36 object-contain select-none">
+                                <div class="flex justify-between w-48 text-[10px] font-bold text-slate-700 mt-1 px-4">
+                                    <span>Derecho</span>
+                                    <span>Izquierdo</span>
                                 </div>
-
-                                <!-- Pie Izquierdo Dorsal -->
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-24 h-40" viewBox="0 0 100 160" fill="none" stroke="#334155" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <!-- Silueta Pie Izquierdo Dorsal (Espejo) -->
-                                        <path d="M 50 155 C 72 155 78 145 80 130 C 82 115 85 95 86 75 C 87 55 86 40 82 32 C 80 28 74 28 72 34 C 70 25 64 25 62 33 C 60 25 54 25 52 35 C 50 28 44 28 42 38 C 40 30 30 30 28 45 C 26 65 28 85 30 110 C 32 135 38 155 50 155 Z" fill="#ffffff" />
-                                        
-                                        <!-- Dedos y Uñas Pie Izquierdo -->
-                                        <!-- Dedo 1 (Hallux / Pulgar en borde interno izquierdo) -->
-                                        <path d="M 42 38 Q 35 35 28 45" />
-                                        <rect x="30" y="38" width="9" height="7" rx="2" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 2 -->
-                                        <path d="M 52 35 Q 47 32 42 38" />
-                                        <rect x="43" y="31" width="7" height="6" rx="1.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 3 -->
-                                        <path d="M 62 33 Q 57 30 52 35" />
-                                        <rect x="54" y="28" width="6" height="5.5" rx="1.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 4 -->
-                                        <path d="M 72 34 Q 67 31 62 33" />
-                                        <rect x="64" y="29" width="5.5" height="5" rx="1" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-                                        
-                                        <!-- Dedo 5 (Meñique en borde externo derecho) -->
-                                        <path d="M 82 32 Q 77 30 72 34" />
-                                        <rect x="76" y="33" width="5" height="4.5" rx="1" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.2" />
-
-                                        <!-- Líneas anatómicas del empeine -->
-                                        <path d="M 45 75 Q 58 80 70 75" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
-                                        <path d="M 47 105 Q 58 110 68 105" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
-                                    </svg>
-                                    <span class="text-[10px] font-bold text-slate-700 mt-1">Izquierdo</span>
-                                </div>
-
                             </div>
                         </div>
 
-                        <!-- PAR 2: VISTA PLANTAR (PLANTA, ARCO Y TALÓN) -->
+                        <!-- PAR 2: VISTA PLANTAR (PLANTA Y TALÓN) -->
                         <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50 text-center">
                             <div class="text-[11px] font-black uppercase text-[#005B94] tracking-wide mb-1">
-                                VISTA PLANTAR (Planta, Metatarso y Talón)
+                                VISTA PLANTAR (Planta y Talón)
                             </div>
-                            <p class="text-[9px] text-slate-500 mb-2">Para registrar helomas (callos), hiperqueratosis, verrugas y puntos de presión.</p>
+                            <p class="text-[9px] text-slate-500 mb-2">Para registrar helomas (callos), hiperqueratosis y zonas de sobrepresión.</p>
 
-                            <!-- SVG PLANTAR: Der. e Izq. -->
-                            <div class="flex items-center justify-center space-x-6 py-1">
-                                
-                                <!-- Pie Derecho Plantar -->
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-24 h-40" viewBox="0 0 100 160" fill="none" stroke="#334155" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <!-- Silueta Planta Derecha con curvatura de arco interno -->
-                                        <path d="M 52 154 C 36 154 34 142 34 126 C 34 105 38 85 36 62 C 34 50 36 44 42 42 C 48 40 58 40 66 42 C 78 45 84 55 82 70 C 80 82 66 94 66 112 C 66 128 66 154 52 154 Z" fill="#ffffff" />
-                                        
-                                        <!-- Almohadillas de los dedos plantares -->
-                                        <ellipse cx="74" cy="28" rx="7" ry="9" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="61" cy="24" rx="5" ry="7" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="50" cy="24" rx="4.5" ry="6.5" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="40" cy="26" rx="4" ry="6" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="31" cy="30" rx="3.5" ry="5.5" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-
-                                        <!-- Zonas de Metatarso y Talón -->
-                                        <path d="M 37 68 Q 55 75 79 68" stroke="#cbd5e1" stroke-width="1.2" />
-                                        <path d="M 40 120 Q 50 125 64 120" stroke="#cbd5e1" stroke-width="1.2" />
-                                        <circle cx="50" cy="138" r="8" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2 2" />
-                                    </svg>
-                                    <span class="text-[10px] font-bold text-slate-700 mt-1">Der.</span>
+                            <!-- Imagen Oficial Plantar Subida por la Clínica -->
+                            <div class="flex flex-col items-center justify-center py-1">
+                                <img src="assets/img/podograma-plantar-clean.png" alt="Vista Plantar Podología" class="h-36 object-contain select-none">
+                                <div class="flex justify-between w-48 text-[10px] font-bold text-slate-700 mt-1 px-4">
+                                    <span>Der.</span>
+                                    <span>Izq.</span>
                                 </div>
-
-                                <!-- Pie Izquierdo Plantar -->
-                                <div class="flex flex-col items-center">
-                                    <svg class="w-24 h-40" viewBox="0 0 100 160" fill="none" stroke="#334155" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <!-- Silueta Planta Izquierda (Espejo) -->
-                                        <path d="M 48 154 C 64 154 66 142 66 126 C 66 105 62 85 64 62 C 66 50 64 44 58 42 C 52 40 42 40 34 42 C 22 45 16 55 18 70 C 20 82 34 94 34 112 C 34 128 34 154 48 154 Z" fill="#ffffff" />
-                                        
-                                        <!-- Almohadillas de los dedos plantares -->
-                                        <ellipse cx="26" cy="28" rx="7" ry="9" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="39" cy="24" rx="5" ry="7" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="50" cy="24" rx="4.5" ry="6.5" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="60" cy="26" rx="4" ry="6" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-                                        <ellipse cx="69" cy="30" rx="3.5" ry="5.5" fill="#f8fafc" stroke="#334155" stroke-width="1.3" />
-
-                                        <!-- Zonas de Metatarso y Talón -->
-                                        <path d="M 21 68 Q 45 75 63 68" stroke="#cbd5e1" stroke-width="1.2" />
-                                        <path d="M 36 120 Q 50 125 60 120" stroke="#cbd5e1" stroke-width="1.2" />
-                                        <circle cx="50" cy="138" r="8" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2 2" />
-                                    </svg>
-                                    <span class="text-[10px] font-bold text-slate-700 mt-1">Izq.</span>
-                                </div>
-
                             </div>
                         </div>
 
